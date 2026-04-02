@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import com.mb.spring.dto.EmpResDto;
+import com.mb.spring.dto.EmpWithSkills;
 import com.mb.spring.entity.Department;
 import com.mb.spring.entity.Emp;
+import com.mb.spring.entity.EmpProfile;
 import com.mb.spring.entity.Skills;
 import com.mb.spring.exception.UserNotFoundException;
 import com.mb.spring.repo.DepartmentRepo;
 import com.mb.spring.repo.EmployeeRepo;
+import com.mb.spring.repo.ProfileRepo;
 import com.mb.spring.repo.SkillsRepo;
 
 
@@ -30,6 +35,8 @@ public class EmpService {
 	private SkillsRepo skillrepo;
 	@Autowired
 	private  ModelMapper modelMapper;
+	@Autowired
+	private ProfileRepo profileRepo;
 
 
 	public List<EmpResDto> getallemp() {
@@ -64,18 +71,23 @@ public class EmpService {
 	}
 	
 
-	public Emp update(long id, Emp emp) {
+	public Emp update(long id, EmpResDto emp) {
 
 		Emp e = repo.findById(id).orElseThrow(() -> new UserNotFoundException("Emp not found with id "+id));
-	
+		
+		Department d=deptRepo.findById(e.getDepartment().getDeptId()).orElseThrow(()->new UserNotFoundException("dept not found with id "+id));
+		
+		EmpProfile p=profileRepo.findById(e.getProfile().getProfile_id()).orElseThrow(()->new UserNotFoundException("profile not found with id "+id));
+		
+		//skillrepo.findAllById(emp.getSkills().stream().map(skill->skill.getId()))
+		//skillrepo.findById(emp.getSkills().stream().map(skill->skill.getId()).toList());
+		List<Skills> s=skillrepo.findAll();
 		
 		e.setEmail(emp.getEmail());
 		e.setName(emp.getName());
-		System.out.println(emp.getDepartment());
-		System.out.println(emp.getDepartment().getDeptName());
-		e.setDepartment(emp.getDepartment());
-		e.setProfile(emp.getProfile());
-		e.setSkills(emp.getSkills());
+	
+		e.setDepartment(d);
+		e.setProfile(p);
 		
 		return e;
 	}
@@ -88,6 +100,11 @@ public class EmpService {
 		repo.deleteById(id);
 
 	}
+
+//	public List<Emp> getBySkills(String skill) {
+//		// TODO Auto-generated method stub
+//		return repo.findEmployeesBySkill(skill);
+//	}
 
 
 }

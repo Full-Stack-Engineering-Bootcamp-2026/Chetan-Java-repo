@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mb.spring.dto.EmpResDto;
+import com.mb.spring.dto.EmpWithSkills;
 import com.mb.spring.entity.Emp;
 import com.mb.spring.service.EmpService;
 
@@ -44,7 +46,7 @@ public class EmpController {
 
 	
 	@PutMapping("/employees/{id}")
-	public Emp update(@PathVariable long id,@RequestBody Emp emp) {
+	public Emp update(@PathVariable long id,@RequestBody EmpResDto emp) {
 		return service.update(id,emp);
 	}
 	
@@ -55,6 +57,12 @@ public class EmpController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	
+//	@GetMapping("/employee")
+//	public ResponseEntity<List<Emp>> EmpBySkills(@PathVariable String skill){
+//		return ResponseEntity.ok(service.getBySkills(skill));
+//	}
+//	
 	
 	
 
