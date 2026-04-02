@@ -1,0 +1,17 @@
+package com.mb.spring.repo;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.mb.spring.entity.Emp;
+
+@Repository
+public interface EmployeeRepo extends JpaRepository<Emp, Long>{
+
+	
+
+	
+	
+
+}
