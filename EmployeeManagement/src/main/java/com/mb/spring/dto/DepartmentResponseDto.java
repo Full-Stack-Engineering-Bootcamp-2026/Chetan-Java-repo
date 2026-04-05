@@ -5,7 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class EmpWithSkills {
-	 private String name; 
-	
+
+public class DepartmentResponseDto {
+
+    private Long id;
+
+    private String deptName;
+
 }

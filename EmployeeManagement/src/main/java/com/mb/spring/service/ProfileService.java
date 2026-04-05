@@ -2,39 +2,56 @@ package com.mb.spring.service;
 
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mb.spring.entity.EmpProfile;
+import com.mb.spring.dto.ProfileRequestDto;
+import com.mb.spring.dto.ProfileResponseDto;
+import com.mb.spring.entity.Profile;
 import com.mb.spring.exception.UserNotFoundException;
-import com.mb.spring.repo.ProfileRepo;
+import com.mb.spring.repo.ProfileRepository;
 
+import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProfileService {
 
-	@Autowired
-	private ProfileRepo repo;
-	
-	public EmpProfile create(EmpProfile profile) {
-		return repo.save(profile);
-	}
+    private final ProfileRepository profileRepository;
+    private final ModelMapper modelMapper;
 
-	public List<EmpProfile> getAll() {
-		// TODO Auto-generated method stub
-		return repo.findAll();
-	}
+    public ProfileResponseDto create(ProfileRequestDto dto) {
 
-	public void deleteById(long id) {
-		repo.findById(id).orElseThrow(()->new UserNotFoundException( "profile id does not exist for deleteById"));
-		
-	}
+        Profile profile = modelMapper.map(dto, Profile.class);
+        Profile saved = profileRepository.save(profile);
 
-	public EmpProfile getById(long id) {
-		// TODO Auto-generated method stub
-		return  repo.findById(id).orElseThrow(()->new UserNotFoundException( "profile id does not exist for deleteById"));
-		
-	}
+        return modelMapper.map(saved, ProfileResponseDto.class);
+    }
+
+    
+    public List<ProfileResponseDto> getAll() {
+        return profileRepository.findAll()
+                .stream()
+                .map(profile -> modelMapper.map(profile, ProfileResponseDto.class))
+                .toList();
+    }
+
+
+    public ProfileResponseDto getById(Long id) {
+
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Profile not found"));
+
+        return modelMapper.map(profile, ProfileResponseDto.class);
+    }
+
+    public void deleteById(Long id) {
+
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Profile not found"));
+
+        profileRepository.delete(profile);
+    }
 }

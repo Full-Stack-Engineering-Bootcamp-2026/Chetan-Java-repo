@@ -3,9 +3,10 @@ package com.mb.spring.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mb.spring.entity.EmpProfile;
+
+import com.mb.spring.entity.Profile;
 
 @Repository
-public interface ProfileRepo extends JpaRepository<EmpProfile, Long>{
+public interface ProfileRepository extends JpaRepository<Profile, Long>{
 
 }

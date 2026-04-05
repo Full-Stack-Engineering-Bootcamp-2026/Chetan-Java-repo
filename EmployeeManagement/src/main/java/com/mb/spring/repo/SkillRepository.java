@@ -5,12 +5,12 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.mb.spring.entity.Skills;
+import com.mb.spring.entity.Skill;
 
 
 @Repository
-public interface SkillsRepo extends JpaRepository<Skills, Long>{
+public interface SkillRepository extends JpaRepository<Skill, Long>{
 
-	Skills findBySkillName(String skillName);
+	Skill findBySkillName(String skillName);
 
 }

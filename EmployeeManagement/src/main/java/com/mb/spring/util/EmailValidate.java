@@ -1,6 +1,6 @@
 package com.mb.spring.util;
 
-import com.mb.spring.controller.ValidEmail;
+import com.mb.spring.util.ValidEmail;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

@@ -3,45 +3,56 @@ package com.mb.spring.service;
 import java.util.List;
 
 import org.jspecify.annotations.Nullable;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mb.spring.dto.DepartmentRequestDto;
+import com.mb.spring.dto.DepartmentResponseDto;
 import com.mb.spring.entity.Department;
 import com.mb.spring.exception.UserNotFoundException;
-import com.mb.spring.repo.DepartmentRepo;
+import com.mb.spring.repo.DepartmentRepository;
 
 import jakarta.transaction.Transactional;
-
-
+import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
-
+@RequiredArgsConstructor
 public class DepartmentService {
-	
-	@Autowired
-	private DepartmentRepo repo;
 
-	public  Department create(Department department) {
-		// TODO Auto-generated method stub
-		return repo.save(department);
-	}
+    private final DepartmentRepository departmentRepository;
+    private final ModelMapper modelMapper;
 
-	public List<Department> getAll() {
-		// TODO Auto-generated method stub
-		return repo.findAll();
-	}
+    public DepartmentResponseDto create(DepartmentRequestDto dto) {
 
-	public void deleteById(long id) {
-		// TODO Auto-generated method stub
-		repo.findById(id).orElseThrow(()->new UserNotFoundException("id does not exist"));
-		repo.deleteById(id);
-	}
+        Department department = modelMapper.map(dto, Department.class);
+        Department dept = departmentRepository.save(department);
 
-	public Department getById(long id) {
-		// TODO Auto-generated method stub
-		return repo.findById(id).orElseThrow(()-> new UserNotFoundException("cannot get Id for department getbyid"));
-	}
-	
-	
-	
+        return modelMapper.map(dept, DepartmentResponseDto.class);
+    }
+
+
+    public List<DepartmentResponseDto> getAll() {
+        return departmentRepository.findAll()
+                .stream()
+                .map(dept -> modelMapper.map(dept, DepartmentResponseDto.class))
+                .toList();
+    }
+
+
+    public DepartmentResponseDto getById(Long id) {
+
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Department not found"));
+
+        return modelMapper.map(department, DepartmentResponseDto.class);
+    }
+
+    public void deleteById(Long id) {
+
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Department not found"));
+
+        departmentRepository.delete(department);
+    }
 }
