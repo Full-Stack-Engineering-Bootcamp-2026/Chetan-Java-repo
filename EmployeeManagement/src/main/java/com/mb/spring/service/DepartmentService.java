@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class DepartmentService {
+public class DepartmentService implements DepartmentServiceInterfece{
 
     private final DepartmentRepository departmentRepository;
     private final ModelMapper modelMapper;

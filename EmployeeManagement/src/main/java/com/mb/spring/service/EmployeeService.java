@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class EmployeeService {
+public class EmployeeService implements EmployeeServiceInterface{
 
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
